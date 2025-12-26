@@ -10,6 +10,7 @@ const UserRole = require("./userRoleModel")(sequelize);
 const Right = require("./rightModel")(sequelize);
 const RoleRight = require("./roleRightModel")(sequelize);
 const UiAsset = require("./uiAssetModel")(sequelize);
+const UserProfile = require("./userProfileModel")(sequelize);
 
 /* =========================
    Company & Business Unit
@@ -31,6 +32,10 @@ VehicleSegment.hasMany(User, { foreignKey: "segment_id" });
 
 User.belongsTo(CustomerGroup, { foreignKey: "customer_group_id" });
 CustomerGroup.hasMany(User, { foreignKey: "customer_group_id" });
+
+User.hasOne(UserProfile, { foreignKey: "user_id" });
+UserProfile.belongsTo(User, { foreignKey: "user_id" });
+
 
 /* =========================
    Roles & Rights
@@ -71,5 +76,6 @@ module.exports = {
   User,
   Role,
   Right,
-  UiAsset
+  UiAsset,
+  UserProfile
 };

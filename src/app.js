@@ -19,6 +19,7 @@ app.use(express.json());
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/vehicle", require("./routes/vehicleRoutes"));
+app.use("/api/profile", require("./routes/profileRoutes"));
 
 // ===== Database Connection =====
 sequelize.authenticate()
