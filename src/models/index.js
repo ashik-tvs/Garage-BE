@@ -1,81 +1,70 @@
+const Sequelize = require("sequelize");
 const sequelize = require("../config/database");
 
-const Company = require("./companyModel")(sequelize);
-const BusinessUnit = require("./businessUnitModel")(sequelize);
-const VehicleSegment = require("./vehicleSegmentModel")(sequelize);
-const CustomerGroup = require("./customerGroupModel")(sequelize);
-const User = require("./userModel")(sequelize);
-const Role = require("./roleModel")(sequelize);
-const UserRole = require("./userRoleModel")(sequelize);
-const Right = require("./rightModel")(sequelize);
-const RoleRight = require("./roleRightModel")(sequelize);
-const UiAsset = require("./uiAssetModel")(sequelize);
-const UserProfile = require("./userProfileModel")(sequelize);
+const db = {};
+
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
 /* =========================
-   Company & Business Unit
+   Models
 ========================= */
-Company.hasMany(BusinessUnit, { foreignKey: "company_id" });
-BusinessUnit.belongsTo(Company, { foreignKey: "company_id" });
+db.Company = require("./companyModel")(sequelize, Sequelize.DataTypes);
+db.BusinessUnit = require("./businessUnitModel")(sequelize, Sequelize.DataTypes);
+db.VehicleSegment = require("./vehicleSegmentModel")(sequelize, Sequelize.DataTypes);
+db.CustomerGroup = require("./customerGroupModel")(sequelize, Sequelize.DataTypes);
+db.User = require("./userModel")(sequelize, Sequelize.DataTypes);
+db.Role = require("./roleModel")(sequelize, Sequelize.DataTypes);
+db.UserRole = require("./userRoleModel")(sequelize, Sequelize.DataTypes);
+db.Right = require("./rightModel")(sequelize, Sequelize.DataTypes);
+db.RoleRight = require("./roleRightModel")(sequelize, Sequelize.DataTypes);
+db.UiAsset = require("./uiAssetModel")(sequelize, Sequelize.DataTypes);
+db.UserProfile = require("./userProfileModel")(sequelize, Sequelize.DataTypes);
+db.PasswordResetOtp = require("./passwordResetOtpModel")(sequelize, Sequelize.DataTypes);
 
 /* =========================
-   User Relations
+   Associations
 ========================= */
-User.belongsTo(Company, { foreignKey: "company_id" });
-Company.hasMany(User, { foreignKey: "company_id" });
+db.Company.hasMany(db.BusinessUnit, { foreignKey: "company_id" });
+db.BusinessUnit.belongsTo(db.Company, { foreignKey: "company_id" });
 
-User.belongsTo(BusinessUnit, { foreignKey: "business_unit_id" });
-BusinessUnit.hasMany(User, { foreignKey: "business_unit_id" });
+db.User.belongsTo(db.Company, { foreignKey: "company_id" });
+db.Company.hasMany(db.User, { foreignKey: "company_id" });
 
-User.belongsTo(VehicleSegment, { foreignKey: "segment_id" });
-VehicleSegment.hasMany(User, { foreignKey: "segment_id" });
+db.User.belongsTo(db.BusinessUnit, { foreignKey: "business_unit_id" });
+db.BusinessUnit.hasMany(db.User, { foreignKey: "business_unit_id" });
 
-User.belongsTo(CustomerGroup, { foreignKey: "customer_group_id" });
-CustomerGroup.hasMany(User, { foreignKey: "customer_group_id" });
+db.User.belongsTo(db.VehicleSegment, { foreignKey: "segment_id" });
+db.VehicleSegment.hasMany(db.User, { foreignKey: "segment_id" });
 
-User.hasOne(UserProfile, { foreignKey: "user_id" });
-UserProfile.belongsTo(User, { foreignKey: "user_id" });
+db.User.belongsTo(db.CustomerGroup, { foreignKey: "customer_group_id" });
+db.CustomerGroup.hasMany(db.User, { foreignKey: "customer_group_id" });
 
+db.User.hasOne(db.UserProfile, { foreignKey: "user_id" });
+db.UserProfile.belongsTo(db.User, { foreignKey: "user_id" });
 
-/* =========================
-   Roles & Rights
-========================= */
-User.belongsToMany(Role, {
-  through: UserRole,
+db.User.belongsToMany(db.Role, {
+  through: db.UserRole,
   foreignKey: "user_id",
   otherKey: "role_id"
 });
 
-Role.belongsToMany(User, {
-  through: UserRole,
+db.Role.belongsToMany(db.User, {
+  through: db.UserRole,
   foreignKey: "role_id",
   otherKey: "user_id"
 });
 
-Role.belongsToMany(Right, {
-  through: RoleRight,
+db.Role.belongsToMany(db.Right, {
+  through: db.RoleRight,
   foreignKey: "role_id",
   otherKey: "right_id"
 });
 
-Right.belongsToMany(Role, {
-  through: RoleRight,
+db.Right.belongsToMany(db.Role, {
+  through: db.RoleRight,
   foreignKey: "right_id",
   otherKey: "role_id"
 });
 
-/* =========================
-   Export
-========================= */
-module.exports = {
-  sequelize,
-  Company,
-  BusinessUnit,
-  VehicleSegment,
-  CustomerGroup,
-  User,
-  Role,
-  Right,
-  UiAsset,
-  UserProfile
-};
+module.exports = db;
