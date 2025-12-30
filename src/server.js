@@ -1,11 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const app = express();
-const sequelize = require("./config/database");
-const apiService = require("./../../fe/src/services/apiservice");
+const axios = require("axios");
 
-// ===== CORS Setup =====
+const sequelize = require("./config/database");
+
+const app = express();
+
+/* ===============================
+   CORS CONFIG
+================================ */
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -14,25 +18,40 @@ app.use(
   })
 );
 
-// ===== Body Parser =====
-app.use(express.json({ limit: "2mb" })); // match proxy needs
+/* ===============================
+   BODY PARSER
+================================ */
+app.use(express.json({ limit: "2mb" }));
+app.use("/assets", express.static("assets"));
 
-// ===== Routes =====
+
+/* ===============================
+   ROUTES (LOCAL APIs)
+================================ */
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/vehicle", require("./routes/vehicleRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
+app.use("/api/ui-assets", require("./routes/uiAssetRoutes"));
 
-// ===============================
-// 🚀 PROXY HELPER
-// ===============================
+/* ===============================
+   BACKEND AXIOS CLIENT
+================================ */
+const httpClient = axios.create({
+  timeout: 30000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+/* ===============================
+   PROXY HELPER
+================================ */
 async function proxyRequest(req, res, targetUrl) {
   try {
-    console.log(`➡️ Proxy Request → ${targetUrl}`);
+    console.log(`➡️ Proxy → ${targetUrl}`);
 
-    const response = await apiService.post(targetUrl, req.body, {
-      timeout: 30000,
-      headers: { "Content-Type": "application/json" },
+    const response = await httpClient.post(targetUrl, req.body, {
       auth: {
         username: process.env.API_USERNAME,
         password: process.env.API_PASSWORD,
@@ -42,15 +61,16 @@ async function proxyRequest(req, res, targetUrl) {
     return res.json(response.data);
   } catch (error) {
     console.error("❌ Proxy Error:", error.message);
+
     return res
       .status(error.response?.status || 500)
       .json(error.response?.data || { error: "Upstream API failed" });
   }
 }
 
-// ===============================
-// 🛠️ PROXY ROUTES
-// ===============================
+/* ===============================
+   PROXY ROUTES
+================================ */
 app.post("/api/parts-list", (req, res) =>
   proxyRequest(
     req,
@@ -90,6 +110,7 @@ app.post("/api/filter", (req, res) =>
     "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/getMasterList"
   )
 );
+
 app.post("/api/search", (req, res) =>
   proxyRequest(
     req,
@@ -97,12 +118,17 @@ app.post("/api/search", (req, res) =>
     "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/generalSearch"
   )
 );
-// ===============================
-// 🖼️ OCI IMAGE FETCH
-// ===============================
+
+/* ===============================
+   OCI IMAGE FETCH
+================================ */
 app.get("/api/oci/read", async (req, res) => {
   try {
     const fileName = req.query.name;
+
+    if (!fileName) {
+      return res.status(400).json({ message: "File name is required" });
+    }
 
     const response = await axios.get(
       "https://websprint.mytvspartsmart.in/storage-service/api/v1/storage/oci/read",
@@ -125,23 +151,19 @@ app.get("/api/oci/read", async (req, res) => {
   }
 });
 
-// ===== Database Connection =====
-// ===== Database Sync =====
+/* ===============================
+   DATABASE + SERVER START
+================================ */
 sequelize
   .sync({ alter: true })
   .then(() => {
-    console.log("✅ Database synced");
+    console.log("✅ Database synced successfully");
 
-    // ===== Start Server =====
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
-  .catch((err) => console.error("❌ DB Sync Error:", err));
-
-// ===== Start Server =====
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  .catch((err) => {
+    console.error("❌ Database sync failed:", err);
+  });
