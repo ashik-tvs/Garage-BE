@@ -7,10 +7,10 @@ module.exports = (sequelize) => {
       primaryKey: true,
       autoIncrement: true
     },
-    segment_code: {
-      type: DataTypes.STRING,
-      unique: true
-    },
+      segment_code: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
     segment_name: DataTypes.STRING,
     status: DataTypes.TINYINT
   }, {
