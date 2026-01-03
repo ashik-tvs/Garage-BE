@@ -14,11 +14,9 @@ module.exports = (sequelize) => {
 
     username: {
       type: DataTypes.STRING,
-      unique: true
     },
     email: {
       type: DataTypes.STRING,
-      unique: true
     },
     password_hash: DataTypes.STRING,
     status: DataTypes.TINYINT

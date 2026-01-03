@@ -33,6 +33,12 @@ app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/vehicle", require("./routes/vehicleRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
 app.use("/api/ui-assets", require("./routes/uiAssetRoutes"));
+app.use("/api/fastmovers", require("./routes/fastMoversRoutes"));
+app.use("/api/highvalue", require("./routes/highValueRoutes"));
+app.use("/api/electric", require("./routes/electricRoutes"));
+app.use("/api/cng", require("./routes/cngRoutes"));
+app.use("/api/only-with-us", require("./routes/onlyWithUsRoutes"));
+app.use("/api/discontinue-model", require("./routes/discontinueModelRoutes"));
 
 /* ===============================
    BACKEND AXIOS CLIENT
