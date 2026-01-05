@@ -3,6 +3,7 @@ const controller = require("../controllers/highValueController");
 
 router.post("/", controller.create);
 router.get("/", controller.getAll);
+router.get("/categories", controller.getUniqueCategories);
 router.get("/segment/:segment_id", controller.getBySegment);
 router.get("/:id", controller.getById);
 router.put("/:id", controller.update);

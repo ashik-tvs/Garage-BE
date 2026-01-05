@@ -1,5 +1,6 @@
 const db = require("../models");
 const Fastmover = db.Fastmover;
+const { Sequelize } = require("sequelize");
 
 class FastmoversService {
   static async create(data) {
@@ -11,6 +12,23 @@ class FastmoversService {
       where: filters,
       order: [["created_at", "DESC"]]
     });
+  }
+
+  static async findUniqueCategories() {
+    const results = await Fastmover.findAll({
+      attributes: [
+        [Sequelize.fn('DISTINCT', Sequelize.col('aggregate')), 'aggregate']
+      ],
+      where: {
+        aggregate: {
+          [Sequelize.Op.ne]: null
+        }
+      },
+      order: [['aggregate', 'ASC']],
+      raw: true
+    });
+    
+    return results.map(item => item.aggregate);
   }
 
   static async findBySegment(segment_id) {

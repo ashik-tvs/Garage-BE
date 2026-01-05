@@ -97,7 +97,7 @@ app.post("/api/vehicle-list", (req, res) =>
   proxyRequest(
     req,
     res,
-    "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/getVehicleList"
+    "https://websprint.mytvspartsmart.in/catalog/api/v1/external/getVehicleList"
   )
 );
 

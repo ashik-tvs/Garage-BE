@@ -56,6 +56,26 @@ exports.getAll = async (req, res) => {
 };
 
 /* =========================
+   GET UNIQUE CATEGORIES
+========================= */
+exports.getUniqueCategories = async (req, res) => {
+  try {
+    const categories = await FastmoversService.findUniqueCategories();
+
+    return res.status(200).json({
+      success: true,
+      data: categories
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+/* =========================
    GET BY SEGMENT
 ========================= */
 exports.getBySegment = async (req, res) => {

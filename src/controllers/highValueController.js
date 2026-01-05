@@ -14,6 +14,15 @@ exports.getAll = async (_, res) => {
   res.json({ success: true, data });
 };
 
+exports.getUniqueCategories = async (req, res) => {
+  try {
+    const categories = await HighvalueService.findUniqueCategories();
+    res.json({ success: true, data: categories });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 exports.getBySegment = async (req, res) => {
   const data = await HighvalueService.findBySegment(req.params.segment_id);
   res.json({ success: true, data });
