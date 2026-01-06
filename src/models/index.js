@@ -106,4 +106,20 @@ db.DiscontinueModel.belongsTo(db.VehicleSegment, { foreignKey: "segment_id" });
 db.VehicleSegment.hasMany(db.OnlyWithUs, { foreignKey: "segment_id" });
 db.OnlyWithUs.belongsTo(db.VehicleSegment, { foreignKey: "segment_id" });
 
+/* ===== Customer & Warehouse Models ===== */
+db.CustomerMaster = require("./customerMasterModel")(sequelize, Sequelize.DataTypes);
+db.Warehouse = require("./warehouseModel")(sequelize, Sequelize.DataTypes);
+db.CustomerWarehouseMapping = require("./customerWarehouseMappingModel")(sequelize, Sequelize.DataTypes);
+db.WarehouseETA = require("./warehouseETAModel")(sequelize, Sequelize.DataTypes);
+
+/* ===== Customer & Warehouse Associations ===== */
+db.CustomerMaster.hasMany(db.CustomerWarehouseMapping, { foreignKey: "customer_id" });
+db.CustomerWarehouseMapping.belongsTo(db.CustomerMaster, { foreignKey: "customer_id" });
+
+db.Warehouse.hasMany(db.CustomerWarehouseMapping, { foreignKey: "warehouse_id" });
+db.CustomerWarehouseMapping.belongsTo(db.Warehouse, { foreignKey: "warehouse_id" });
+
+db.CustomerWarehouseMapping.hasMany(db.WarehouseETA, { foreignKey: "mapping_id" });
+db.WarehouseETA.belongsTo(db.CustomerWarehouseMapping, { foreignKey: "mapping_id" });
+
 module.exports = db;
