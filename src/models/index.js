@@ -119,6 +119,15 @@ db.CustomerWarehouseMapping.belongsTo(db.CustomerMaster, { foreignKey: "customer
 db.Warehouse.hasMany(db.CustomerWarehouseMapping, { foreignKey: "warehouse_id" });
 db.CustomerWarehouseMapping.belongsTo(db.Warehouse, { foreignKey: "warehouse_id" });
 
+// Add alias here for WarehouseETA
+db.CustomerWarehouseMapping.hasMany(db.WarehouseETA, { 
+  foreignKey: "mapping_id", 
+  as: "etas"  // <-- define the alias you will use in queries
+});
+db.WarehouseETA.belongsTo(db.CustomerWarehouseMapping, { 
+  foreignKey: "mapping_id",
+  as: "customerWarehouse" // optional, for reverse
+});
 db.CustomerWarehouseMapping.hasMany(db.WarehouseETA, { foreignKey: "mapping_id" });
 db.WarehouseETA.belongsTo(db.CustomerWarehouseMapping, { foreignKey: "mapping_id" });
 
