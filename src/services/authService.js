@@ -16,9 +16,7 @@ const login = async (email, password) => {
     {
       userId: user.user_id,
       companyId: user.company_id,
-      businessUnitId: user.business_unit_id,
-      segmentId: user.segment_id,
-      customerId: user.customer_id,
+      segmentId: user.segment_id
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
@@ -34,8 +32,8 @@ const login = async (email, password) => {
       company_id: user.company_id,
       business_unit_id: user.business_unit_id,
       segment_id: user.segment_id,
-      customer_id: user.customer_id,
-    },
+      customer_id: user.customer_id
+    }
   };
 };
 
@@ -55,7 +53,7 @@ const forgotPassword = async (email) => {
   await PasswordResetOtp.create({
     user_id: user.user_id,
     otp_hash: otpHash,
-    expires_at: new Date(Date.now() + 10 * 60 * 1000), // 10 mins
+    expires_at: new Date(Date.now() + 10 * 60 * 1000) // 10 mins
   });
 
   // 🔔 TEMP: log OTP (replace with email/SMS)
@@ -71,7 +69,7 @@ const verifyResetOtp = async (email, otp) => {
 
   const otpRecord = await PasswordResetOtp.findOne({
     where: { user_id: user.user_id, is_used: 0 },
-    order: [["created_at", "DESC"]],
+    order: [["created_at", "DESC"]]
   });
 
   if (!otpRecord) throw new Error("OTP not found");
@@ -111,5 +109,5 @@ module.exports = {
   login,
   forgotPassword,
   verifyResetOtp,
-  resetPassword,
+  resetPassword
 };
