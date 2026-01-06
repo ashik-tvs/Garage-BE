@@ -161,7 +161,7 @@ app.get("/api/oci/read", async (req, res) => {
    DATABASE + SERVER START
 ================================ */
 sequelize
-  .sync({ alter: true })
+  .sync({ force: false })
   .then(() => {
     console.log("✅ Database synced successfully");
 
