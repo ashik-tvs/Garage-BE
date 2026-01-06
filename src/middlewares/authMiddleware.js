@@ -13,11 +13,12 @@ const authMiddleware = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // ✅ decoded is GUARANTEED now
     req.user = {
-      user_id: decoded.userId,
-      company_id: decoded.companyId,
-      segment_id: decoded.segmentId
+      userId: decoded.userId,
+      companyId: decoded.companyId,
+      businessUnitId: decoded.businessUnitId,
+      segmentId: decoded.segmentId,
+      customerId: decoded.customerId, 
     };
 
     next();
