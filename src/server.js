@@ -81,7 +81,7 @@ app.post("/api/parts-list", (req, res) =>
   proxyRequest(
     req,
     res,
-    "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/getPartsList"
+    "https://websprint.mytvspartsmart.in/catalog/api/v1/external/getPartsList"
   )
 );
 
@@ -89,7 +89,7 @@ app.post("/api/related", (req, res) =>
   proxyRequest(
     req,
     res,
-    "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/getPartRelations"
+    "https://websprint.mytvspartsmart.in/catalog/api/v1/external/getPartRelations"
   )
 );
 
@@ -105,7 +105,7 @@ app.post("/api/stock-list", (req, res) =>
   proxyRequest(
     req,
     res,
-    "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/getStockList"
+    "https://websprint.mytvspartsmart.in/catalog/api/v1/external/getStockList"
   )
 );
 
@@ -113,7 +113,7 @@ app.post("/api/filter", (req, res) =>
   proxyRequest(
     req,
     res,
-    "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/getMasterList"
+    "https://websprint.mytvspartsmart.in/catalog/api/v1/external/getMasterList"
   )
 );
 
@@ -121,7 +121,7 @@ app.post("/api/search", (req, res) =>
   proxyRequest(
     req,
     res,
-    "https://uat-websprint.mytvspartsmart.in/catalog/api/v1/external/generalSearch"
+    "https://websprint.mytvspartsmart.in/catalog/api/v1/external/generalSearch"
   )
 );
 
