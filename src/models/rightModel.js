@@ -9,7 +9,6 @@ module.exports = (sequelize) => {
     },
     right_code: {
       type: DataTypes.STRING,
-      unique: true
     },
     right_name: DataTypes.STRING,
     module: DataTypes.STRING

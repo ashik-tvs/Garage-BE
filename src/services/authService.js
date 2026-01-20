@@ -31,7 +31,8 @@ const login = async (email, password) => {
       email: user.email,
       company_id: user.company_id,
       business_unit_id: user.business_unit_id,
-      segment_id: user.segment_id
+      segment_id: user.segment_id,
+      customer_id: user.customer_id
     }
   };
 };

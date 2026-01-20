@@ -1,8 +1,15 @@
 const profileService = require("../services/profileService");
 
+/* =========================
+   GET PROFILE
+========================= */
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.user.user_id;
+    const userId = req.user?.user_id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized user" });
+    }
 
     const profile = await profileService.getProfileByUserId(userId);
 
@@ -10,18 +17,21 @@ exports.getProfile = async (req, res) => {
       return res.status(404).json({ message: "Profile not found" });
     }
 
-    res.json(profile);
+    return res.status(200).json(profile);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
+/* =========================
+   UPDATE PROFILE
+========================= */
 exports.updateProfile = async (req, res) => {
   try {
-    const userId = req.user.user_id; // from JWT
+    const userId = req.user?.user_id;
 
     if (!userId) {
-      return res.status(400).json({ message: "Invalid user" });
+      return res.status(401).json({ message: "Unauthorized user" });
     }
 
     const profile = await profileService.updateProfileByUserId(
@@ -29,12 +39,11 @@ exports.updateProfile = async (req, res) => {
       req.body
     );
 
-    res.json({
+    return res.status(200).json({
       message: "Profile updated successfully",
       profile
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
-
