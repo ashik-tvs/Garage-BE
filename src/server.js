@@ -126,6 +126,14 @@ app.post("/api/search", (req, res) =>
   )
 );
 
+app.post("/api/matertype", (req, res) =>
+  proxyRequest(
+    req,
+    res,
+    "https://websprint.mytvspartsmart.in/catalog/api/v1/external/getMasterList"
+  )
+);
+
 /* ===============================
    OCI IMAGE FETCH
 ================================ */
