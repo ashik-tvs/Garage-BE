@@ -45,7 +45,7 @@ app.use("/api/customer-eta", require("./routes/customerETARoutes"));
    BACKEND AXIOS CLIENT
 ================================ */
 const httpClient = axios.create({
-  timeout: 30000,
+  timeout: 120000, // 120 seconds for slow external API queries
   headers: {
     "Content-Type": "application/json",
   },
