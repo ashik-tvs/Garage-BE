@@ -8,9 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       party_number: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.STRING(50),
         allowNull: false,
-        unique: true,
       },
       party_name: {
         type: DataTypes.TEXT,
@@ -92,7 +91,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: "customer_master_new",
       timestamps: false,
-    }
+    },
   );
 
   return CustomerMaster;
