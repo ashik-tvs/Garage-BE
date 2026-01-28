@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       warehouse_code: {
         type: DataTypes.STRING(50),
         allowNull: false,
-        unique: true,
       },
       warehouse_name: {
         type: DataTypes.STRING(255),
